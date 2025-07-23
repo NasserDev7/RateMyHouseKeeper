@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <!-- Search Bar -->
+    <div class="container mt-4">
+        <form method="get" action="{{ url_for('main.home') }}" class="input-group mb-4">
+            <input type="text" name="search" class="form-control" placeholder="Search housekeepers by name, nationality, or working country..." value="{{ request.args.get('search', '') }}">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Housekeepers List -->
+    <div class="container">
+        <h2 class="mb-4">Housekeepers</h2>
+        <div class="row">
+            {% if housekeepers %}
+                {% for housekeeper in housekeepers %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ housekeeper.name }}</h5>
+                                <p class="card-text"><strong>Nationality:</strong> {{ housekeeper.nationality }}</p>
+                                <p class="card-text"><strong>Working Countries:</strong> {{ housekeeper.working_countries }}</p>
+                                <a href="{{ url_for('main.housekeeper_detail', hk_id=housekeeper.id) }}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No housekeepers found matching your search criteria.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

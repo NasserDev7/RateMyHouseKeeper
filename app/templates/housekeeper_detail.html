@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}Housekeeper Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Column: Housekeeper Basic Information -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">{{ housekeeper.name }}</h2>
+                    <p class="card-text"><strong>Nationality:</strong> {{ housekeeper.nationality }}</p>
+                    <p class="card-text"><strong>Passport Number:</strong> {{ housekeeper.passport_number }}</p>
+                    <p class="card-text"><strong>Working Countries:</strong> {{ housekeeper.working_countries }}</p>
+                    <p class="card-text"><strong>Note:</strong> {{ housekeeper.note }}</p>
+                    <p class="card-text"><strong>Overall Rating:</strong> {{ overall_percentage | round(2) }}%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Graphical Statistics -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3>Ratings Statistics</h3>
+                    <canvas id="ratingsChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Submit Evaluation Section -->
+{% if current_user.is_authenticated %}
+<div class="mt-4">
+    <h3>Submit Your Evaluation</h3>
+    <form method="POST" class="p-4 bg-light rounded shadow-sm">
+        {{ form.hidden_tag() }}
+
+        <!-- Cleaning Skills -->
+        <div class="card mb-3">
+            <div class="card-body">
+                {{ form.cleaning.label(class="form-label") }}
+                <div class="d-flex flex-wrap gap-3">
+                    {% for choice in form.cleaning.choices %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cleaning" value="{{ choice[0] }}" id="cleaning-{{ choice[0] }}">
+                            <label class="form-check-label" for="cleaning-{{ choice[0] }}">{{ choice[1] }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Timing Skills -->
+        <div class="card mb-3">
+            <div class="card-body">
+                {{ form.timing.label(class="form-label") }}
+                <div class="d-flex flex-wrap gap-3">
+                    {% for choice in form.timing.choices %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="timing" value="{{ choice[0] }}" id="timing-{{ choice[0] }}">
+                            <label class="form-check-label" for="timing-{{ choice[0] }}">{{ choice[1] }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Cooking Skills -->
+        <div class="card mb-3">
+            <div class="card-body">
+                {{ form.cooking.label(class="form-label") }}
+                <div class="d-flex flex-wrap gap-3">
+                    {% for choice in form.cooking.choices %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="cooking" value="{{ choice[0] }}" id="cooking-{{ choice[0] }}">
+                            <label class="form-check-label" for="cooking-{{ choice[0] }}">{{ choice[1] }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Childcare Skills -->
+        <div class="card mb-3">
+            <div class="card-body">
+                {{ form.childcare.label(class="form-label") }}
+                <div class="d-flex flex-wrap gap-3">
+                    {% for choice in form.childcare.choices %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="childcare" value="{{ choice[0] }}" id="childcare-{{ choice[0] }}">
+                            <label class="form-check-label" for="childcare-{{ choice[0] }}">{{ choice[1] }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Respectfulness -->
+        <div class="card mb-3">
+            <div class="card-body">
+                {{ form.respect.label(class="form-label") }}
+                <div class="d-flex flex-wrap gap-3">
+                    {% for choice in form.respect.choices %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="respect" value="{{ choice[0] }}" id="respect-{{ choice[0] }}">
+                            <label class="form-check-label" for="respect-{{ choice[0] }}">{{ choice[1] }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+{% endif %}
+
+    <!-- Evaluations Section -->
+<!--    <div class="mt-4">
+        <h3>Evaluations</h3>
+        {% if ratings %}
+            <ul class="list-group">
+                {% for rating in ratings %}
+                    <li class="list-group-item">
+                        <p><strong>Cleaning Skills:</strong> {{ rating.cleaning }}</p>
+                        <p><strong>Time Management:</strong> {{ rating.timing }}</p>
+                        <p><strong>Cooking Ability:</strong> {{ rating.cooking }}</p>
+                        <p><strong>Childcare / Elderly Care:</strong> {{ rating.childcare }}</p>
+                        <p><strong>Respectfulness:</strong> {{ rating.respect }}</p>
+                        <p><strong>By:</strong> {{ rating.author.username }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">No evaluations available for this housekeeper.</p>
+        {% endif %}
+    </div>-->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('ratingsChart').getContext('2d');
+    const ratingsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Cleaning', 'Timing', 'Cooking', 'Childcare', 'Respect'],
+            datasets: [{
+                label: 'Average Ratings',
+                data: [
+                    {{ average_cleaning | safe }},
+                    {{ average_timing | safe }},
+                    {{ average_cooking | safe }},
+                    {{ average_childcare | safe }},
+                    {{ average_respect | safe }}
+                ],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
