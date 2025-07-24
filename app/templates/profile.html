@@ -61,7 +61,7 @@
         </div>
 
         <!-- Add Housekeeper Tab -->
-        <div class="tab-pane fade" id="add-housekeeper" role="tabpanel" aria-labelledby="add-housekeeper-tab">
+        <div class="form-group" id="add-housekeeper" role="tabpanel" aria-labelledby="add-housekeeper-tab">
             <form method="POST">
                 {{ housekeeper_form.hidden_tag() }}
                 <div>
@@ -78,7 +78,7 @@
                 </div>
                 <div>
                     {{ housekeeper_form.working_countries.label }}<br>
-                    {{ housekeeper_form.working_countries(class="form-control") }}
+                    {{ housekeeper_form.working_countries(class="form-control", multiple="multiple") }}
                 </div>
                 <div>
                     {{ housekeeper_form.note.label }}<br>

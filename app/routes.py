@@ -165,12 +165,15 @@ def profile():
             flash("Passport number is already registered for another housekeeper. Please use a different passport number.", "danger")
             return redirect(url_for("main.profile"))
 
+        # Convert the list of working countries into a comma-separated string
+        working_countries_str = ",".join(housekeeper_form.working_countries.data)
+
         # Create a new housekeeper
         housekeeper = Housekeeper(
             name=housekeeper_form.name.data,
             passport_number=housekeeper_form.passport_number.data,
             nationality=housekeeper_form.nationality.data,
-            working_countries=housekeeper_form.working_countries.data,
+            working_countries=working_countries_str,
             note=housekeeper_form.note.data,
             user_id=current_user.id
         )
