@@ -2,6 +2,7 @@ from app import db
 from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import Column, String
 
 
 
@@ -31,7 +32,7 @@ class Housekeeper(db.Model):
     name = db.Column(db.String(100), nullable=False)
     passport_number = db.Column(db.String(50), unique=True)
     nationality = db.Column(db.String(100))
-    working_countries = db.Column(db.String(200), nullable=True)
+    working_countries = db.Column(db.String(500), nullable=False)  # Store as a comma-separated string
     note = db.Column(db.Text, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref='housekeepers', lazy=True)
