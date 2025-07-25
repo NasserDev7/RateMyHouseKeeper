@@ -28,6 +28,7 @@ class ProfileForm(FlaskForm):
     contact_email = StringField('Contact Email', validators=[Optional(), Email()])
     contact_number = StringField('Contact Number', validators=[Optional()])
     password = PasswordField('New Password', validators=[Optional()])
+    confirm_password = PasswordField("Confirm New Password")  # Add this field
     submit = SubmitField('Update Profile')
 
 

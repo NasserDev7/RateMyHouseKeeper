@@ -2,21 +2,19 @@ from app import db
 from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import Column, String
-
-
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    username = db.Column(db.String(150), nullable=False, unique=True)
+    email = db.Column(db.String(150), nullable=False, unique=True)
+    password = db.Column(db.String(256), nullable=False)  # Store hashed passwords
     first_name = db.Column(db.String(64), nullable=True)
     last_name = db.Column(db.String(64), nullable=True)
     country = db.Column(db.String(64), nullable=True)
     contact_email = db.Column(db.String(120), nullable=True)
     contact_number = db.Column(db.String(20), nullable=True)
-    ratings = db.relationship('Rating', backref='author', lazy=True, overlaps="user_ratings,author")  # Refined overlaps
+    ratings = db.relationship('Rating', back_populates='author', lazy=True, overlaps="user_ratings,author")  # Refined overlaps
+    housekeepers = db.relationship('Housekeeper', back_populates='user', lazy=True)
 
     def set_password(self, password):
         """Hashes the password and stores it."""
@@ -35,26 +33,9 @@ class Housekeeper(db.Model):
     working_countries = db.Column(db.String(500), nullable=False)  # Store as a comma-separated string
     note = db.Column(db.Text, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref='housekeepers', lazy=True)
-    
-    # Add relationship to Rating
-    ratings = db.relationship('Rating', backref='evaluated_housekeeper', lazy=True)
+    user = db.relationship('User', back_populates='housekeepers', lazy=True)
+    ratings = db.relationship('Rating', back_populates='evaluated_housekeeper', lazy=True)
 
-
-'''
-class Rating(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    cleaning = db.Column(db.String(20), nullable=False)
-    timing = db.Column(db.String(20), nullable=False)
-    cooking = db.Column(db.String(20), nullable=False)
-    childcare = db.Column(db.String(20), nullable=False)
-    respect = db.Column(db.String(20), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    housekeeper_id = db.Column(db.Integer, db.ForeignKey('housekeeper.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    user = db.relationship('User', backref='user_ratings', lazy=True, overlaps="ratings,author,user_ratings")  # Refined overlaps
-    housekeeper = db.relationship('Housekeeper', backref='ratings', lazy=True, overlaps="evaluations,evaluated_housekeeper,ratings")  # Refined overlaps
-'''
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -66,4 +47,7 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     housekeeper_id = db.Column(db.Integer, db.ForeignKey('housekeeper.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    user = db.relationship('User', backref='user_ratings', lazy=True, overlaps="ratings,author,user_ratings")
+    score = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text, nullable=True)
+    author = db.relationship('User', back_populates='ratings', overlaps="user_ratings,author")  # Refined overlaps
+    evaluated_housekeeper = db.relationship('Housekeeper', back_populates='ratings', lazy=True)

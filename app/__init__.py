@@ -46,10 +46,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from app.config import Config
+from flask_migrate import Migrate
 
+# Initialize extensions
 db = SQLAlchemy()
 login_manager = LoginManager()
+migrate = Migrate()  # Add Flask-Migrate
 
+# User loader for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
     from app.models import User  # Import User model here to avoid circular imports
@@ -61,6 +65,7 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app)
+    migrate.init_app(app, db)  # Initialize Flask-Migrate
     login_manager.init_app(app)
     login_manager.login_view = 'main.login'  # Redirect unauthenticated users to the login page
 
