@@ -62,4 +62,5 @@ class EvaluationForm(FlaskForm):
     cooking = SelectField('Cooking:', choices=choices, validators=[DataRequired()])
     childcare = SelectField('Childcare:', choices=choices, validators=[DataRequired()])
     respect = SelectField('Respect:', choices=choices, validators=[DataRequired()])
+    comment = TextAreaField('Comment', validators=[Optional()])  # Add this field
     submit = SubmitField('Submit Evaluation')

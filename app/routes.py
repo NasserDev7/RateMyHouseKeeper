@@ -77,7 +77,7 @@ def login():
         if user and check_password_hash(user.password, form.password.data):  # Validate the password
             login_user(user)
             flash('Logged in successfully!', 'success')
-            return redirect(url_for('main.profile'))
+            return redirect(url_for('main.home'))
         else:
             flash('Invalid email or password.', 'danger')
     return render_template('login.html', form=form)
@@ -203,14 +203,12 @@ def housekeeper_detail(hk_id):
 
     return render_template("housekeeper_detail.html", housekeeper=housekeeper, form=form, ratings=ratings, avg_rating=avg_rating)
 '''
-
 @main.route("/housekeeper/<int:hk_id>", methods=["GET", "POST"])
-@login_required
 def housekeeper_detail(hk_id):
     housekeeper = Housekeeper.query.get_or_404(hk_id)
     form = EvaluationForm()
 
-    if form.validate_on_submit():
+    if current_user.is_authenticated and form.validate_on_submit():
         # Calculate the score based on the evaluation fields
         score = (
             form.cleaning.data +
@@ -227,19 +225,20 @@ def housekeeper_detail(hk_id):
             cooking=form.cooking.data,
             childcare=form.childcare.data,
             respect=form.respect.data,
-            score=score,  # Provide a value for the score
+            score=score,
+            comment=form.comment.data,
             user_id=current_user.id,
             housekeeper_id=hk_id
         )
         db.session.add(rating)
         db.session.commit()
         flash("Your evaluation has been submitted.", "success")
-        return redirect(url_for('main.housekeeper_detail', hk_id=hk_id))
+        return redirect(url_for("main.housekeeper_detail", hk_id=hk_id))
 
     # Fetch all ratings for the housekeeper
     ratings = housekeeper.ratings
 
-    # Recalculate average ratings
+    # Calculate average ratings
     average_cleaning = sum([r.cleaning for r in ratings]) / len(ratings) if ratings else 0
     average_timing = sum([r.timing for r in ratings]) / len(ratings) if ratings else 0
     average_cooking = sum([r.cooking for r in ratings]) / len(ratings) if ratings else 0

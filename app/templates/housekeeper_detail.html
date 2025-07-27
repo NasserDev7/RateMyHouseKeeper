@@ -30,116 +30,105 @@
         </div>
     </div>
 
-<!-- Submit Evaluation Section -->
-{% if current_user.is_authenticated %}
-<div class="mt-4">
-    <h3>Submit Your Evaluation</h3>
-    <form method="POST" class="p-4 bg-light rounded shadow-sm">
-        {{ form.hidden_tag() }}
+    <!-- Submit Evaluation Section -->
+    {% if current_user.is_authenticated %}
+    <div class="mt-4">
+        <h3>Submit Your Evaluation</h3>
+        <form method="POST" class="p-4 bg-light rounded shadow-sm">
+            {{ form.hidden_tag() }}
 
-        <!-- Cleaning Skills -->
-        <div class="card mb-3">
-            <div class="card-body">
-                {{ form.cleaning.label(class="form-label") }}
-                <div class="d-flex flex-wrap gap-3">
-                    {% for choice in form.cleaning.choices %}
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="cleaning" value="{{ choice[0] }}" id="cleaning-{{ choice[0] }}">
-                            <label class="form-check-label" for="cleaning-{{ choice[0] }}">{{ choice[1] }}</label>
-                        </div>
-                    {% endfor %}
+            <!-- Cleaning Skills -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    {{ form.cleaning.label(class="form-label") }}
+                    <div class="d-flex flex-wrap gap-3">
+                        {% for choice in form.cleaning.choices %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="cleaning" value="{{ choice[0] }}" id="cleaning-{{ choice[0] }}">
+                                <label class="form-check-label" for="cleaning-{{ choice[0] }}">{{ choice[1] }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Timing Skills -->
-        <div class="card mb-3">
-            <div class="card-body">
-                {{ form.timing.label(class="form-label") }}
-                <div class="d-flex flex-wrap gap-3">
-                    {% for choice in form.timing.choices %}
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="timing" value="{{ choice[0] }}" id="timing-{{ choice[0] }}">
-                            <label class="form-check-label" for="timing-{{ choice[0] }}">{{ choice[1] }}</label>
-                        </div>
-                    {% endfor %}
+            <!-- Timing Skills -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    {{ form.timing.label(class="form-label") }}
+                    <div class="d-flex flex-wrap gap-3">
+                        {% for choice in form.timing.choices %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="timing" value="{{ choice[0] }}" id="timing-{{ choice[0] }}">
+                                <label class="form-check-label" for="timing-{{ choice[0] }}">{{ choice[1] }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Cooking Skills -->
-        <div class="card mb-3">
-            <div class="card-body">
-                {{ form.cooking.label(class="form-label") }}
-                <div class="d-flex flex-wrap gap-3">
-                    {% for choice in form.cooking.choices %}
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="cooking" value="{{ choice[0] }}" id="cooking-{{ choice[0] }}">
-                            <label class="form-check-label" for="cooking-{{ choice[0] }}">{{ choice[1] }}</label>
-                        </div>
-                    {% endfor %}
+            <!-- Cooking Skills -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    {{ form.cooking.label(class="form-label") }}
+                    <div class="d-flex flex-wrap gap-3">
+                        {% for choice in form.cooking.choices %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="cooking" value="{{ choice[0] }}" id="cooking-{{ choice[0] }}">
+                                <label class="form-check-label" for="cooking-{{ choice[0] }}">{{ choice[1] }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Childcare Skills -->
-        <div class="card mb-3">
-            <div class="card-body">
-                {{ form.childcare.label(class="form-label") }}
-                <div class="d-flex flex-wrap gap-3">
-                    {% for choice in form.childcare.choices %}
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="childcare" value="{{ choice[0] }}" id="childcare-{{ choice[0] }}">
-                            <label class="form-check-label" for="childcare-{{ choice[0] }}">{{ choice[1] }}</label>
-                        </div>
-                    {% endfor %}
+            <!-- Childcare Skills -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    {{ form.childcare.label(class="form-label") }}
+                    <div class="d-flex flex-wrap gap-3">
+                        {% for choice in form.childcare.choices %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="childcare" value="{{ choice[0] }}" id="childcare-{{ choice[0] }}">
+                                <label class="form-check-label" for="childcare-{{ choice[0] }}">{{ choice[1] }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Respectfulness -->
-        <div class="card mb-3">
-            <div class="card-body">
-                {{ form.respect.label(class="form-label") }}
-                <div class="d-flex flex-wrap gap-3">
-                    {% for choice in form.respect.choices %}
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="respect" value="{{ choice[0] }}" id="respect-{{ choice[0] }}">
-                            <label class="form-check-label" for="respect-{{ choice[0] }}">{{ choice[1] }}</label>
-                        </div>
-                    {% endfor %}
+            <!-- Respectfulness -->
+            <div class="card mb-3">
+                <div class="card-body">
+                    {{ form.respect.label(class="form-label") }}
+                    <div class="d-flex flex-wrap gap-3">
+                        {% for choice in form.respect.choices %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="respect" value="{{ choice[0] }}" id="respect-{{ choice[0] }}">
+                                <label class="form-check-label" for="respect-{{ choice[0] }}">{{ choice[1] }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Submit Button -->
-        <div class="text-center">
-            {{ form.submit(class="btn btn-primary") }}
-        </div>
-    </form>
-</div>
-{% endif %}
-
-    <!-- Evaluations Section -->
-<!--    <div class="mt-4">
-        <h3>Evaluations</h3>
-        {% if ratings %}
-            <ul class="list-group">
-                {% for rating in ratings %}
-                    <li class="list-group-item">
-                        <p><strong>Cleaning Skills:</strong> {{ rating.cleaning }}</p>
-                        <p><strong>Time Management:</strong> {{ rating.timing }}</p>
-                        <p><strong>Cooking Ability:</strong> {{ rating.cooking }}</p>
-                        <p><strong>Childcare / Elderly Care:</strong> {{ rating.childcare }}</p>
-                        <p><strong>Respectfulness:</strong> {{ rating.respect }}</p>
-                        <p><strong>By:</strong> {{ rating.author.username }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="text-muted">No evaluations available for this housekeeper.</p>
-        {% endif %}
-    </div>-->
+            <!-- Comment Section -->
+           <!--  <div class="card mb-3">
+                <div class="card-body">
+                    {{ form.comment.label(class="form-label") }}
+                    {{ form.comment(class="form-control") }}
+                </div>
+            </div>
+            -->
+            <!-- Submit Button -->
+            <div class="text-center">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <p class="text-danger">Please <a href="{{ url_for('main.login') }}">log in</a> to submit an evaluation.</p>
+    {% endif %}
 </div>
 {% endblock %}
 
